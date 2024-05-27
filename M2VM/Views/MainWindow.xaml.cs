@@ -40,7 +40,6 @@ namespace ProjetBadge
 
         private void SendMessageButton_Click(object sender, RoutedEventArgs e)
         {
-           
             try
             {
                 string message = MessageTextBox.Text;
@@ -50,17 +49,6 @@ namespace ProjetBadge
             catch (Exception ex)
             {
                 StatusTextBlock.Text = $"Failed to send message: {ex.Message}";
-            }
-   
-            
-        }
-
-        private void SendMessage(string message)
-        {
-            if (client != null && client.Connected)
-            {
-                byte[] data = Encoding.ASCII.GetBytes(message);
-                stream.Write(data, 0, data.Length);
             }
         }
     }
