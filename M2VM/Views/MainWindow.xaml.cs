@@ -1,7 +1,6 @@
 ﻿using BadgeScreen.M2VM.ViewModels;
-using System;
+using System.Collections.ObjectModel;
 using System.Net.Sockets;
-using System.Text;
 using System.Windows;
 
 namespace ProjetBadge
@@ -11,11 +10,14 @@ namespace ProjetBadge
         private TcpClient client;
         private NetworkStream stream;
         private MainViewModel mainViewModel;
+        private ObservableCollection<string> messages;
 
         public MainWindow()
         {
             InitializeComponent();
             mainViewModel = new MainViewModel();
+            messages = new ObservableCollection<string>();
+            MessagesListBox.ItemsSource = messages;
         }
 
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
@@ -49,6 +51,16 @@ namespace ProjetBadge
             catch (Exception ex)
             {
                 StatusTextBlock.Text = $"Failed to send message: {ex.Message}";
+            }
+        }
+
+        private void SaveMessageButton_Click(object sender, RoutedEventArgs e)
+        {
+            string message = SaveMessageTextBox.Text;
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                messages.Add(message);
+                SaveMessageTextBox.Clear();
             }
         }
     }

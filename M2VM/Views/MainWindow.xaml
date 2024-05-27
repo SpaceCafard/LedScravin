@@ -16,17 +16,11 @@
         <TextBlock x:Name="StatusTextBlock" Width="360" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,90,0,0"/>
 
         <!--Lister des messages-->
-        <ListBox av:ItemsSource="{av:SampleData ItemCount=5}" Margin="370,40,100,240"/>
-
-        <Button Content="Envoyer" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="450,40,0,0"/>
-        <Button Content="Envoyer" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="450,60,0,0"/>
-        <Button Content="Envoyer" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="450,80,0,0"/>
-        <Button Content="Envoyer" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="450,100,0,0"/>
-        <Button Content="Envoyer" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="450,120,0,0"/>
+        <ListBox x:Name="MessagesListBox" Margin="370,40,100,240" />
 
         <!--Ajouter un message-->
         <Label Content="Message :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,120,0,0"/>
         <TextBox x:Name="SaveMessageTextBox" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,120,0,0"/>
-        <Button Content="Enregistrer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,120,0,0" Click=""/>
+        <Button Content="Enregistrer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,120,0,0" Click="SaveMessageButton_Click"/>
     </Grid>
 </Window>
