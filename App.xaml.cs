@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace BadgeScreen
+namespace Projet_badge
 {
     /// <summary>
     /// Interaction logic for App.xaml

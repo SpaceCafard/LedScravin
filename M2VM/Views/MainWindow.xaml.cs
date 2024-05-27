@@ -1,50 +1,67 @@
-
-using BadgeScreen.M2VM.Models;
+﻿using BadgeScreen.M2VM.ViewModels;
+using System;
+using System.Net.Sockets;
+using System.Text;
 using System.Windows;
 
-namespace BadgeScreen
+namespace ProjetBadge
 {
     public partial class MainWindow : Window
     {
-        private MainModel mainModel;
+        private TcpClient client;
+        private NetworkStream stream;
+        private MainViewModel mainViewModel;
 
         public MainWindow()
         {
             InitializeComponent();
-            mainModel = new MainModel("127.0.0.1", 1700); // Utilisez l'adresse IP et le port corrects
+            mainViewModel = new MainViewModel();
         }
 
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (int.TryParse(this.PortTextBox.Text, out int port))
             {
-                mainModel.Connect();
-                StatusTextBlock.Text = "Connected to the server!";
+                try
+                {
+                    mainViewModel.Connect(port);
+                    StatusTextBlock.Text = "Connecté !";
+                }
+                catch (Exception ex)
+                {
+                    StatusTextBlock.Text = $"La connexion a échouée: {ex.Message}";
+                }
             }
-            catch (Exception ex)
+            else
             {
-                StatusTextBlock.Text = $"Connection failed: {ex.Message}";
+                StatusTextBlock.Text = "Numéro de port non valide.";
             }
         }
 
         private void SendMessageButton_Click(object sender, RoutedEventArgs e)
         {
+           
             try
             {
                 string message = MessageTextBox.Text;
-                mainModel.SendToOneDevice(message);
+                mainViewModel.SendToOneDevice(message);
                 StatusTextBlock.Text = "Message sent!";
             }
             catch (Exception ex)
             {
                 StatusTextBlock.Text = $"Failed to send message: {ex.Message}";
             }
+   
+            
         }
 
-        private void DisconnectButton_Click(object sender, RoutedEventArgs e)
+        private void SendMessage(string message)
         {
-            mainModel.Disconnect();
-            StatusTextBlock.Text = "Disconnected from the server.";
+            if (client != null && client.Connected)
+            {
+                byte[] data = Encoding.ASCII.GetBytes(message);
+                stream.Write(data, 0, data.Length);
+            }
         }
     }
 }

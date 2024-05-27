@@ -1,0 +1,39 @@
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\bin\Debug\net8.0-windows\Projet_badge.exe
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\bin\Debug\net8.0-windows\Projet_badge.deps.json
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\bin\Debug\net8.0-windows\Projet_badge.runtimeconfig.json
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\bin\Debug\net8.0-windows\Projet_badge.dll
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\bin\Debug\net8.0-windows\Projet_badge.pdb
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\App.g.cs
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\Projet_badge_MarkupCompile.cache
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.g.resources
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.GeneratedMSBuildEditorConfig.editorconfig
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.AssemblyInfoInputs.cache
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.AssemblyInfo.cs
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.csproj.CoreCompileInputs.cache
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.dll
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\refint\Projet_badge.dll
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.pdb
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.genruntimeconfig.cache
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\ref\Projet_badge.dll
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\M2VM\Views\MainWindow.baml
+F:\LP DEVOPS\DOT NET\Projet .NET\Projet_badge\Projet_badge\obj\Debug\net8.0-windows\M2VM\Views\MainWindow.g.cs
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\bin\Debug\net8.0-windows\Projet_badge.exe
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\bin\Debug\net8.0-windows\Projet_badge.deps.json
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\bin\Debug\net8.0-windows\Projet_badge.runtimeconfig.json
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\bin\Debug\net8.0-windows\Projet_badge.dll
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\bin\Debug\net8.0-windows\Projet_badge.pdb
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\M2VM\Views\MainWindow.baml
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\M2VM\Views\MainWindow.g.cs
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\App.g.cs
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\Projet_badge_MarkupCompile.cache
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.g.resources
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.GeneratedMSBuildEditorConfig.editorconfig
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.AssemblyInfoInputs.cache
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.AssemblyInfo.cs
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.csproj.CoreCompileInputs.cache
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.sourcelink.json
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.dll
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\refint\Projet_badge.dll
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.pdb
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\Projet_badge.genruntimeconfig.cache
+F:\LP DEVOPS\DOT NET\Projet .NET\repo github\Projet_badge\obj\Debug\net8.0-windows\ref\Projet_badge.dll
