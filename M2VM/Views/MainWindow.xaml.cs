@@ -1,5 +1,6 @@
 ﻿using BadgeScreen.M2VM.ViewModels;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net.Sockets;
 using System.Windows;
 
@@ -11,6 +12,7 @@ namespace ProjetBadge
         private NetworkStream stream;
         private MainViewModel mainViewModel;
         private ObservableCollection<string> messages;
+        private ObservableCollection<string> filteredMessages; // New collection for filtered messages
 
         public MainWindow()
         {
@@ -25,7 +27,8 @@ namespace ProjetBadge
                 "ZYX",
                 "ZZZZZ"
             };
-            MessagesListBox.ItemsSource = messages;
+            filteredMessages = new ObservableCollection<string>(messages);
+            MessagesListBox.ItemsSource = filteredMessages;
         }
 
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
@@ -67,8 +70,10 @@ namespace ProjetBadge
             string message = SaveMessageTextBox.Text;
             if (!string.IsNullOrWhiteSpace(message))
             {
+                message = message.ToUpper();
                 messages.Add(message);
                 SaveMessageTextBox.Clear();
+                ApplyFilter(); // Apply the current filter to include the new message if necessary
             }
         }
 
@@ -87,6 +92,7 @@ namespace ProjetBadge
                 string selectedMessage = MessagesListBox.SelectedItem as string;
                 SaveMessageTextBox.Text = selectedMessage;
                 messages.Remove(selectedMessage);
+                ApplyFilter(); // Apply the current filter after removing the message
             }
         }
 
@@ -96,6 +102,7 @@ namespace ProjetBadge
             {
                 string selectedMessage = MessagesListBox.SelectedItem as string;
                 messages.Remove(selectedMessage);
+                ApplyFilter(); // Apply the current filter after removing the message
             }
         }
 
@@ -118,44 +125,47 @@ namespace ProjetBadge
 
         private void SortAlphabeticallyButton_Click(object sender, RoutedEventArgs e)
         {
-            var sortedMessages = messages.OrderBy(m => m).ToList();
-            UpdateMessages(sortedMessages);
+            var sortedMessages = filteredMessages.OrderBy(m => m).ToList();
+            UpdateFilteredMessages(sortedMessages);
         }
 
         private void SortSizeAscendingButton_Click(object sender, RoutedEventArgs e)
         {
-            var sortedMessages = messages.OrderBy(m => m.Length).ToList();
-            UpdateMessages(sortedMessages);
+            var sortedMessages = filteredMessages.OrderBy(m => m.Length).ToList();
+            UpdateFilteredMessages(sortedMessages);
         }
 
         private void SortSizeDescendingButton_Click(object sender, RoutedEventArgs e)
         {
-            var sortedMessages = messages.OrderByDescending(m => m.Length).ToList();
-            UpdateMessages(sortedMessages);
+            var sortedMessages = filteredMessages.OrderByDescending(m => m.Length).ToList();
+            UpdateFilteredMessages(sortedMessages);
         }
-        
+
         private void SearchTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            ApplyFilter();
+        }
+
+        private void ApplyFilter()
         {
             string searchText = SearchTextBox.Text.ToLower();
             if (string.IsNullOrEmpty(searchText))
             {
-                // If search text is empty, reset to original messages
-                UpdateMessages(messages);
+                UpdateFilteredMessages(messages);
             }
             else
             {
-                // Filter messages based on search text
                 var filtered = messages.Where(m => m.ToLower().Contains(searchText)).ToList();
-                UpdateMessages(filtered);
+                UpdateFilteredMessages(filtered);
             }
         }
 
-        private void UpdateMessages(IEnumerable<string> sortedMessages)
+        private void UpdateFilteredMessages(IEnumerable<string> updatedMessages)
         {
-            messages.Clear();
-            foreach (var message in sortedMessages)
+            filteredMessages.Clear();
+            foreach (var message in updatedMessages)
             {
-                messages.Add(message);
+                filteredMessages.Add(message);
             }
         }
     }

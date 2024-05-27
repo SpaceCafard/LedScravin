@@ -35,17 +35,20 @@ namespace BadgeScreen.M2VM.ViewModels
             client.Close();
         }
 
-        public void SendToOneDevice(string messages)
+        public void SendToOneDevice(string message)
         {
             // Tester si le message est vide
-            if (messages == "")
+            if (message == "")
             {
                 throw new Exception("No message to send");
             }
             Debug.Print("Debut de l'envoie");
 
-            // 
-            string messageBuilder = transformMessage(messages).ToString();
+            // Si le message n'est pas vide, on le passe d'abord en majuscules
+            message = message.ToUpper();
+
+            //Ensuite on crée la suite de 0 et 1 que l'on veut envoyer grace à la méthode transformMessage
+            string messageBuilder = transformMessage(message).ToString();
 
 
             // Envoie les données via le flux (stream)
@@ -62,7 +65,7 @@ namespace BadgeScreen.M2VM.ViewModels
         }
 
 
-        private StringBuilder transformMessage(string messages)
+        private StringBuilder transformMessage(string message)
         {
             int compteur = 1;
             StringBuilder reponse = new StringBuilder();
@@ -90,7 +93,7 @@ namespace BadgeScreen.M2VM.ViewModels
             for (int i = 1; i < 11; i++)
             {
                 // Pour chaque lettre a coder (défini par le nombre de lettres présentes dans le message)
-                foreach (char lettre in messages)
+                foreach (char lettre in message)
                 {
                     // Ajouter le petit bout de lettre à la ligne 
                     reponse.Append(this.characterTrad[lettre.ToString()].Substring(debut, longueur));
@@ -160,6 +163,125 @@ namespace BadgeScreen.M2VM.ViewModels
             characterTrad.Add("Z", "0000000000000000111100001000100010001111000000000000000");
             characterTrad.Add(" ", "0000000000000000000000000000000000000000000000000000000");
             characterTrad.Add("!", "0000000000001000010000100001000000000100000000000000000");
+
+
+            characterTrad.Add("1",  "00000" +
+                                    "00000" +
+                                    "00010" +
+                                    "00110" +
+                                    "01010" +
+                                    "00010" +
+                                    "00010" +
+                                    "00010" +
+                                    "00000" +
+                                    "00000" +
+                                    "00000");
+            characterTrad.Add("2",  "00000" +
+                                    "00000" +
+                                    "00110" +
+                                    "01001" +
+                                    "00010" +
+                                    "00010" +
+                                    "00100" +
+                                    "01111" +
+                                    "00000" +
+                                    "00000" +
+                                    "00000");
+            characterTrad.Add("3", "00000" +
+                                    "00000" +
+                                    "01111" +
+                                    "00001" +
+                                    "00111" +
+                                    "00001" +
+                                    "00001" +
+                                    "01111" +
+                                    "00000" +
+                                    "00000" +
+                                    "00000");
+
+            characterTrad.Add("4", "00000" +
+                                    "00000" +
+                                    "01001" +
+                                    "01001" +
+                                    "01111" +
+                                    "00001" +
+                                    "00001" +
+                                    "00001" +
+                                    "00000" +
+                                    "00000" +
+                                    "00000");
+
+            characterTrad.Add("5", "00000" +
+                                    "00000" +
+                                    "01111" +
+                                    "01000" +
+                                    "01111" +
+                                    "00001" +
+                                    "00001" +
+                                    "01111" +
+                                    "00000" +
+                                    "00000" +
+                                    "00000");
+
+            characterTrad.Add("6", "00000" +
+                                    "00000" +
+                                    "01111" +
+                                    "01000" +
+                                    "01111" +
+                                    "01001" +
+                                    "01001" +
+                                    "01111" +
+                                    "00000" +
+                                    "00000" +
+                                    "00000");
+
+            characterTrad.Add("7", "00000" +
+                                    "00000" +
+                                    "01111" +
+                                    "00001" +
+                                    "00010" +
+                                    "00010" +
+                                    "00100" +
+                                    "00100" +
+                                    "00000" +
+                                    "00000" +
+                                    "00000");
+
+            characterTrad.Add("8", "00000" +
+                                    "00000" +
+                                    "01111" +
+                                    "01001" +
+                                    "01111" +
+                                    "01001" +
+                                    "01001" +
+                                    "01111" +
+                                    "00000" +
+                                    "00000" +
+                                    "00000");
+
+            characterTrad.Add("9", "00000" +
+                                    "00000" +
+                                    "01111" +
+                                    "01001" +
+                                    "01111" +
+                                    "00001" +
+                                    "00001" +
+                                    "01111" +
+                                    "00000" +
+                                    "00000" +
+                                    "00000");
+
+            characterTrad.Add("0", "00000" +
+                                    "00000" +
+                                    "01111" +
+                                    "01001" +
+                                    "01001" +
+                                    "01001" +
+                                    "01001" +
+                                    "01111" +
+                                    "00000" +
+                                    "00000" +
+                                    "00000");
         }
     }
 }
