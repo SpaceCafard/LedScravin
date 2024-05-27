@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Services.Description;
@@ -21,7 +22,7 @@ namespace BadgeScreen.M2VM.Models
         private int port;
         private TcpClient client;
         private NetworkStream stream;
-        private Dictionary<string, byte[]> characterMapper;
+        private Dictionary<string, string> characterTrad;
 
         public MainModel(string server, int port)
         {
@@ -62,86 +63,53 @@ namespace BadgeScreen.M2VM.Models
 
             
             List<byte[]> contents = new List<byte[]>();
-            
-            contents.Add(GetSecondEnteteToSendContents(messages));
 
 
-            var messageInListByte = transformMessage(messages);
-            foreach (var paquet in messageInListByte)
-            {
-                contents.Add(paquet);
-            }
+            string messageBuilder = transformMessage(messages).ToString();
 
-            foreach (var content in contents)
-            {
-                stream.Write(content, 0, content.Length);
-            }
+
+            // Envoie les données via le flux (stream)
+            byte[] data = Encoding.ASCII.GetBytes(messageBuilder);
+            stream.Write(data, 0, data.Length);
+
             Debug.Print("Envoye");
 
 
         }
 
 
-        private List<byte[]> transformMessage(string messages)
+        private StringBuilder transformMessage(string messages)
         {
-            var res = new List<byte[]>();
-            var temp = new List<byte[]>();
-            //Concatene tout les messages
-            var mess = messages;
+            int compteur = 1;
+            StringBuilder reponse = new StringBuilder();
+            string debug;
+            int debut = 0;
+            int longueur = 5;
 
-            //Pour chacun des caracteres du message
-            foreach (var c in mess)
+            for (int i = 1; i < 11; i++)
             {
-                byte[] content = new byte[11];
 
-
-                
-                //Si on ne connait pas le caractère on le remplace par un caractère vide
-                if (content == null)
+                foreach (char lettre in messages)
                 {
-                    for (int i = 0; i < 11; i++)
-                    {
-                        content[i] = 0;
-                    }
+
+                    debug = this.characterTrad[lettre.ToString()].Substring(debut, longueur);
+
+                    reponse.Append(this.characterTrad[lettre.ToString()].Substring(debut, longueur));
+
                 }
-                temp.Add(content);
-            }
-            double division = mess.Length * 11.0 / 16.0;
-            int nbPaquets = 0;
-            if (division % 1 == 0)
-            {
-                nbPaquets = (int)division;
-            }
-            else
-            {
-                nbPaquets = (int)Math.Ceiling(division);
+
+                while (reponse.Length < 44 * compteur)
+                {
+                    reponse.Append("0");
+                }
+
+                compteur++;
+                debut += 5;
+
             }
 
-            int compt = 0;
-            int currentKey = 0;
-            for (int i = 0; i < nbPaquets; i++)
-            {
-                var final = new byte[16];
-                for (int i2 = 0; i2 < 16; i2++)
-                {
-                    if (compt < mess.Length)
-                    {
-                        final[i2] = temp[compt][currentKey];
-                        currentKey++;
-                        if (currentKey == 11)
-                        {
-                            currentKey = 0;
-                            compt++;
-                        }
-                    }
-                    else
-                    {
-                        final[i2] = 0;
-                    }
-                }
-                res.Add(final);
-            }
-            return res;
+
+            return reponse;
         }
 
         private byte[] GetSecondEnteteToSendContents(string messages)
@@ -158,109 +126,34 @@ namespace BadgeScreen.M2VM.Models
 
         private void InitMappeur()
         {
-            this.characterMapper = new Dictionary<string, byte[]>();
+            this.characterTrad = new Dictionary<string, string>();
 
-            //Majuscules
-            this.characterMapper.Add("A_byte", new byte[] { 0, 126, 129, 129, 129, 126, 129, 129, 129, 126, 0 });
-            this.characterMapper.Add("B_byte", new byte[] { 0, 255, 137, 137, 137, 126, 137, 137, 137, 255, 0 });
-            this.characterMapper.Add("C_byte", new byte[] { 0, 62, 65, 129, 129, 128, 129, 129, 65, 62, 0 });
-            this.characterMapper.Add("D_byte", new byte[] { 0, 254, 145, 137, 137, 137, 137, 137, 145, 254, 0 });
-            this.characterMapper.Add("E_byte", new byte[] { 0, 255, 129, 129, 129, 126, 129, 129, 129, 255, 0 });
-            this.characterMapper.Add("F_byte", new byte[] { 0, 255, 129, 129, 129, 126, 129, 129, 129, 129, 0 });
-            this.characterMapper.Add("G_byte", new byte[] { 0, 62, 65, 129, 129, 128, 133, 133, 65, 62, 0 });
-            this.characterMapper.Add("H_byte", new byte[] { 0, 129, 129, 129, 129, 126, 129, 129, 129, 129, 0 });
-            this.characterMapper.Add("I_byte", new byte[] { 0, 62, 8, 8, 8, 8, 8, 8, 8, 62, 0 });
-            this.characterMapper.Add("J_byte", new byte[] { 0, 2, 1, 1, 1, 1, 129, 129, 65, 62, 0 });
-            this.characterMapper.Add("K_byte", new byte[] { 0, 129, 133, 137, 145, 162, 145, 137, 133, 129, 0 });
-            this.characterMapper.Add("L_byte", new byte[] { 0, 129, 129, 129, 129, 129, 129, 129, 129, 255, 0 });
-            this.characterMapper.Add("M_byte", new byte[] { 0, 129, 195, 165, 165, 153, 129, 129, 129, 129, 0 });
-            this.characterMapper.Add("N_byte", new byte[] { 0, 129, 193, 161, 145, 137, 133, 131, 129, 129, 0 });
-            this.characterMapper.Add("O_byte", new byte[] { 0, 62, 65, 129, 129, 129, 129, 129, 65, 62, 0 });
-            this.characterMapper.Add("P_byte", new byte[] { 0, 254, 145, 145, 145, 254, 128, 128, 128, 128, 0 });
-            this.characterMapper.Add("Q_byte", new byte[] { 0, 62, 65, 129, 129, 129, 145, 145, 73, 190, 128 });
-            this.characterMapper.Add("R_byte", new byte[] { 0, 254, 145, 145, 145, 254, 136, 137, 133, 129, 0 });
-            this.characterMapper.Add("S_byte", new byte[] { 0, 62, 65, 128, 128, 62, 1, 1, 129, 62, 0 });
-            this.characterMapper.Add("T_byte", new byte[] { 0, 255, 8, 8, 8, 8, 8, 8, 8, 8, 0 });
-            this.characterMapper.Add("U_byte", new byte[] { 0, 129, 129, 129, 129, 129, 129, 129, 65, 62, 0 });
-            this.characterMapper.Add("V_byte", new byte[] { 0, 129, 129, 129, 129, 66, 66, 36, 24, 24, 0 });
-            this.characterMapper.Add("W_byte", new byte[] { 0, 129, 129, 129, 153, 165, 165, 165, 66, 66, 0 });
-            this.characterMapper.Add("X_byte", new byte[] { 0, 129, 66, 36, 24, 24, 36, 66, 129, 129, 0 });
-            this.characterMapper.Add("Y_byte", new byte[] { 0, 129, 66, 36, 24, 24, 24, 24, 24, 60, 0 });
-            this.characterMapper.Add("Z_byte", new byte[] { 0, 255, 2, 4, 8, 16, 32, 64, 128, 255, 0 });
-
-            //Minuscules
-            this.characterMapper.Add("a_byte", new byte[] { 0, 0, 30, 33, 65, 65, 65, 65, 63, 0, 0 });
-            this.characterMapper.Add("b_byte", new byte[] { 0, 192, 192, 224, 208, 200, 200, 200, 248, 0, 0 });
-            this.characterMapper.Add("c_byte", new byte[] { 0, 0, 60, 66, 128, 128, 128, 66, 60, 0, 0 });
-            this.characterMapper.Add("d_byte", new byte[] { 0, 28, 12, 12, 12, 12, 140, 204, 120, 0, 0 });
-            this.characterMapper.Add("e_byte", new byte[] { 0, 0, 60, 66, 126, 128, 128, 66, 60, 0, 0 });
-            this.characterMapper.Add("f_byte", new byte[] { 0, 14, 17, 16, 60, 16, 16, 16, 40, 0, 0 });
-            this.characterMapper.Add("g_byte", new byte[] { 0, 0, 60, 66, 66, 66, 62, 2, 60, 66, 60 });
-            this.characterMapper.Add("h_byte", new byte[] { 0, 192, 192, 224, 208, 200, 200, 200, 200, 0, 0 });
-            this.characterMapper.Add("i_byte", new byte[] { 0, 24, 0, 56, 24, 24, 24, 24, 60, 0, 0 });
-            this.characterMapper.Add("j_byte", new byte[] { 0, 6, 0, 14, 6, 6, 6, 70, 58, 0, 0 });
-            this.characterMapper.Add("k_byte", new byte[] { 0, 192, 192, 200, 208, 240, 208, 200, 196, 0, 0 });
-            this.characterMapper.Add("l_byte", new byte[] { 0, 56, 24, 24, 24, 24, 24, 24, 60, 0, 0 });
-            this.characterMapper.Add("m_byte", new byte[] { 0, 0, 198, 255, 146, 146, 146, 146, 146, 0, 0 });
-            this.characterMapper.Add("n_byte", new byte[] { 0, 0, 216, 236, 212, 212, 204, 204, 204, 0, 0 });
-            this.characterMapper.Add("o_byte", new byte[] { 0, 0, 56, 68, 130, 130, 130, 68, 56, 0, 0 });
-            this.characterMapper.Add("p_byte", new byte[] { 0, 240, 104, 100, 100, 120, 96, 96, 240, 0, 0 });
-            this.characterMapper.Add("q_byte", new byte[] { 0, 0, 60, 66, 66, 66, 62, 2, 6, 0, 0 });
-            this.characterMapper.Add("r_byte", new byte[] { 0, 0, 216, 236, 212, 212, 192, 192, 192, 0, 0 });
-            this.characterMapper.Add("s_byte", new byte[] { 0, 0, 126, 128, 124, 2, 2, 130, 124, 0, 0 });
-            this.characterMapper.Add("t_byte", new byte[] { 0, 16, 16, 60, 16, 16, 16, 17, 14, 0, 0 });
-            this.characterMapper.Add("u_byte", new byte[] { 0, 0, 68, 68, 68, 68, 60, 0, 0, 0, 0 });
-            this.characterMapper.Add("v_byte", new byte[] { 0, 0, 68, 68, 68, 40, 16, 0, 0, 0, 0 });
-            this.characterMapper.Add("w_byte", new byte[] { 0, 0, 146, 146, 146, 146, 146, 84, 40, 0, 0 });
-            this.characterMapper.Add("x_byte", new byte[] { 0, 0, 132, 72, 48, 48, 72, 132, 0, 0, 0 });
-            this.characterMapper.Add("y_byte", new byte[] { 0, 0, 68, 68, 68, 60, 4, 4, 24, 0, 0 });
-            this.characterMapper.Add("z_byte", new byte[] { 0, 0, 126, 64, 32, 16, 8, 4, 126, 0, 0 });
-
-            //Symboles et ponctuations
-            this.characterMapper.Add("!_byte", new byte[] { 0, 0, 0, 126, 0, 0, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add("\"_byte", new byte[] { 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add("#_byte", new byte[] { 0, 20, 126, 20, 20, 126, 20, 0, 0, 0, 0 });
-            this.characterMapper.Add("$_byte", new byte[] { 0, 36, 42, 122, 42, 18, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add("%_byte", new byte[] { 0, 98, 100, 8, 16, 38, 70, 0, 0, 0, 0 });
-            this.characterMapper.Add("&_byte", new byte[] { 0, 60, 74, 86, 98, 70, 60, 0, 0, 0, 0 });
-            this.characterMapper.Add("'_byte", new byte[] { 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add("(_byte", new byte[] { 0, 0, 28, 34, 66, 0, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add(")_byte", new byte[] { 0, 0, 66, 34, 28, 0, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add("*_byte", new byte[] { 0, 8, 42, 28, 42, 8, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add("+_byte", new byte[] { 0, 8, 8, 62, 8, 8, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add(",_byte", new byte[] { 0, 0, 0, 0, 0, 24, 24, 8, 16, 0, 0 });
-            this.characterMapper.Add("-_byte", new byte[] { 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add("._byte", new byte[] { 0, 0, 0, 0, 0, 24, 24, 0, 0, 0, 0 });
-            this.characterMapper.Add("/_byte", new byte[] { 0, 2, 4, 8, 16, 32, 64, 0, 0, 0, 0 });
-            this.characterMapper.Add(":_byte", new byte[] { 0, 0, 24, 24, 0, 24, 24, 0, 0, 0, 0 });
-            this.characterMapper.Add(";_byte", new byte[] { 0, 0, 24, 24, 0, 24, 24, 8, 16, 0, 0 });
-            this.characterMapper.Add("<_byte", new byte[] { 0, 0, 8, 16, 32, 16, 8, 0, 0, 0, 0 });
-            this.characterMapper.Add("=_byte", new byte[] { 0, 0, 0, 62, 0, 62, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add(">_byte", new byte[] { 0, 0, 32, 16, 8, 16, 32, 0, 0, 0, 0 });
-            this.characterMapper.Add("?_byte", new byte[] { 0, 0, 36, 66, 8, 16, 0, 16, 0, 0, 0 });
-            this.characterMapper.Add("@_byte", new byte[] { 0, 60, 66, 153, 161, 157, 64, 60, 0, 0, 0 });
-            this.characterMapper.Add("[_byte", new byte[] { 0, 0, 126, 66, 66, 66, 66, 126, 0, 0, 0 });
-            this.characterMapper.Add("]_byte", new byte[] { 0, 0, 126, 66, 66, 66, 66, 126, 0, 0, 0 });
-            this.characterMapper.Add("^_byte", new byte[] { 8, 20, 34, 0, 0, 0, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add("__byte", new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 126 });
-            this.characterMapper.Add("`_byte", new byte[] { 0, 0, 16, 8, 0, 0, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add("{_byte", new byte[] { 0, 0, 8, 16, 32, 16, 8, 0, 0, 0, 0 });
-            this.characterMapper.Add("|_byte", new byte[] { 0, 0, 24, 24, 24, 24, 24, 0, 0, 0, 0 });
-            this.characterMapper.Add("}_byte", new byte[] { 0, 0, 32, 16, 8, 16, 32, 0, 0, 0, 0 });
-            this.characterMapper.Add("~_byte", new byte[] { 0, 0, 40, 68, 0, 0, 0, 0, 0, 0, 0 });
-            this.characterMapper.Add(" _byte", new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
-
-            //Chiffres
-            this.characterMapper.Add("0_byte", new byte[] { 0, 60, 66, 66, 66, 66, 66, 66, 66, 60, 0 });
-            this.characterMapper.Add("1_byte", new byte[] { 0, 24, 24, 24, 24, 24, 24, 24, 24, 24, 0 });
-            this.characterMapper.Add("2_byte", new byte[] { 0, 60, 66, 2, 4, 8, 16, 32, 64, 126, 0 });
-            this.characterMapper.Add("3_byte", new byte[] { 0, 60, 66, 2, 4, 28, 4, 2, 66, 60, 0 });
-            this.characterMapper.Add("4_byte", new byte[] { 0, 4, 12, 20, 36, 68, 126, 4, 4, 4, 0 });
-            this.characterMapper.Add("5_byte", new byte[] { 0, 126, 64, 64, 120, 2, 2, 2, 66, 60, 0 });
-            this.characterMapper.Add("6_byte", new byte[] { 0, 28, 32, 64, 120, 66, 66, 66, 66, 60, 0 });
-            this.characterMapper.Add("7_byte", new byte[] { 0, 126, 2, 4, 8, 16, 32, 32, 32, 32, 0 });
-            this.characterMapper.Add("8_byte", new byte[] { 0, 60, 66, 66, 66, 60, 66, 66, 66, 60, 0 });
-            this.characterMapper.Add("9_byte", new byte[] { 0, 60, 66, 66, 66, 62, 2, 2, 4, 56, 0 });
+            characterTrad.Add("A", "0000000000000000011001001011110100101001000000000000000");
+            characterTrad.Add("B", "0000000000000000111001001011100100101110000000000000000");
+            characterTrad.Add("C", "0000000000000000011101000010000100000111000000000000000");
+            characterTrad.Add("D", "0000000000000000111001001010010100101110000000000000000");
+            characterTrad.Add("E", "0000000000000000111101000011100100001111000000000000000");
+            characterTrad.Add("F", "0000000000000000111101000011100100001000000000000000000");
+            characterTrad.Add("G", "0000000000000000011101000010110100100111000000000000000");
+            characterTrad.Add("H", "0000000000000000100101001011110100101001000000000000000");
+            characterTrad.Add("I", "0000000000000000100001000010000100001000000000000000000");
+            characterTrad.Add("J", "0000000000000000000100001000010100100110000000000000000");
+            characterTrad.Add("K", "0000000000000000100101010011000101001001000000000000000");
+            characterTrad.Add("L", "0000000000000000100001000010000100001110000000000000000");
+            characterTrad.Add("M", "0000000000000001000111011101011000110001000000000000000");
+            characterTrad.Add("N", "0000000000000000100101101010110100101001000000000000000");
+            characterTrad.Add("O", "0000000000000000011001001010010100100110000000000000000");
+            characterTrad.Add("P", "0000000000000000111001001011100100001000000000000000000");
+            characterTrad.Add("Q", "0000000000000000011001001010010101100111000000000000000");
+            characterTrad.Add("R", "0000000000000000111001001011100101001001000000000000000");
+            characterTrad.Add("S", "0000000000000000011101000001100000101110000000000000000");
+            characterTrad.Add("T", "0000000000000000111000100001000010000100000000000000000");
+            characterTrad.Add("U", "0000000000000000100101001010010100101111000000000000000");
+            characterTrad.Add("V", "0000000000000000101001010010100101000100000000000000000");
+            characterTrad.Add("W", "0000000000000001000110001100011010101010000000000000000");
+            characterTrad.Add("X", "0000000000000000101001010001000101001010000000000000000");
+            characterTrad.Add("Y", "0000000000000000101001010011100010000100000000000000000");
+            characterTrad.Add("Z", "0000000000000000111100001000100010001111000000000000000");
         }
 
     }

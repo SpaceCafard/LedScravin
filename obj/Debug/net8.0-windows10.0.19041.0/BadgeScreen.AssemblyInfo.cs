@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BadgeScreen")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8071189cdd36240eb53f666bdbfa4d5186c7541c")]
 [assembly: System.Reflection.AssemblyProductAttribute("BadgeScreen")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BadgeScreen")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
