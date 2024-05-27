@@ -27,5 +27,25 @@
         <Button x:Name="EditButton" Content="Modifier" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="370,200,0,0" Click="EditButton_Click" IsEnabled="False"/>
         <Button x:Name="DeleteButton" Content="Supprimer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="370,240,0,0" Click="DeleteButton_Click" IsEnabled="False"/>
         <Button x:Name="SendSelectedButton" Content="Envoyer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="370,280,0,0" Click="SendSelectedButton_Click" IsEnabled="False"/>
+
+        <!--Trie-->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <Button Content="Trier alphabétiquement" Name="SortAlphabeticallyButton" Click="SortAlphabeticallyButton_Click" Margin="5"/>
+            <Button Content="Trier par taille ascendante" Name="SortSizeAscendingButton" Click="SortSizeAscendingButton_Click" Margin="5"/>
+            <Button Content="Trier par taille descendante" Name="SortSizeDescendingButton" Click="SortSizeDescendingButton_Click" Margin="5"/>
+        </StackPanel>
+
+        <!-- Filtrer -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="340,160,0,0">
+            <Grid>
+                <TextBox x:Name="SearchTextBox" Width="200" Margin="5" TextChanged="SearchTextBox_TextChanged"/>
+                <TextBlock Text="Search..." IsHitTestVisible="False" 
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Left" 
+                           Margin="8,0,0,0" 
+                           Foreground="Gray" 
+                           />
+            </Grid>
+        </StackPanel>
     </Grid>
 </Window>

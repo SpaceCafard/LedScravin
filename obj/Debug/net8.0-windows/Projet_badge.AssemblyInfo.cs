@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Projet_badge")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+82ee5bb1d6d066a103c551ae4a891eedcd78904d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c954116ff40bac257f05c3c75e2f8b8e4b616cb6")]
 [assembly: System.Reflection.AssemblyProductAttribute("Projet_badge")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Projet_badge")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

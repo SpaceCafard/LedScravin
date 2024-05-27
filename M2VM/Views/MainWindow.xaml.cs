@@ -16,7 +16,15 @@ namespace ProjetBadge
         {
             InitializeComponent();
             mainViewModel = new MainViewModel();
-            messages = new ObservableCollection<string>();
+            messages = new ObservableCollection<string>()
+            {
+                "SALUT",
+                "YANN",
+                "MOUSS",
+                "ABC",
+                "ZYX",
+                "ZZZZZ"
+            };
             MessagesListBox.ItemsSource = messages;
         }
 
@@ -105,6 +113,49 @@ namespace ProjetBadge
                 {
                     StatusTextBlock.Text = $"Failed to send message: {ex.Message}";
                 }
+            }
+        }
+
+        private void SortAlphabeticallyButton_Click(object sender, RoutedEventArgs e)
+        {
+            var sortedMessages = messages.OrderBy(m => m).ToList();
+            UpdateMessages(sortedMessages);
+        }
+
+        private void SortSizeAscendingButton_Click(object sender, RoutedEventArgs e)
+        {
+            var sortedMessages = messages.OrderBy(m => m.Length).ToList();
+            UpdateMessages(sortedMessages);
+        }
+
+        private void SortSizeDescendingButton_Click(object sender, RoutedEventArgs e)
+        {
+            var sortedMessages = messages.OrderByDescending(m => m.Length).ToList();
+            UpdateMessages(sortedMessages);
+        }
+        
+        private void SearchTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            string searchText = SearchTextBox.Text.ToLower();
+            if (string.IsNullOrEmpty(searchText))
+            {
+                // If search text is empty, reset to original messages
+                UpdateMessages(messages);
+            }
+            else
+            {
+                // Filter messages based on search text
+                var filtered = messages.Where(m => m.ToLower().Contains(searchText)).ToList();
+                UpdateMessages(filtered);
+            }
+        }
+
+        private void UpdateMessages(IEnumerable<string> sortedMessages)
+        {
+            messages.Clear();
+            foreach (var message in sortedMessages)
+            {
+                messages.Add(message);
             }
         }
     }

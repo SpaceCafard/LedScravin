@@ -15,6 +15,7 @@ namespace BadgeScreen.M2VM.ViewModels
         private TcpClient client;
         private NetworkStream stream;
         private Dictionary<string, string> characterTrad;
+        private int port;
 
         public MainViewModel()
         {
@@ -23,6 +24,7 @@ namespace BadgeScreen.M2VM.ViewModels
 
         public void Connect(int port)
         {
+            this.port = port;
             client = new TcpClient("127.0.0.1", port); //On fait que avec une connexion locale
             stream = client.GetStream();
         }
@@ -52,6 +54,9 @@ namespace BadgeScreen.M2VM.ViewModels
                 byte[] buffer = Encoding.ASCII.GetBytes(messageBuilder);
                 stream.Write(buffer, 0, buffer.Length);
             }
+
+            //Se reconnecter après un envoi
+            Connect(this.port);
 
             Debug.Print("Envoye");
         }
@@ -156,6 +161,5 @@ namespace BadgeScreen.M2VM.ViewModels
             characterTrad.Add(" ", "0000000000000000000000000000000000000000000000000000000");
             characterTrad.Add("!", "0000000000001000010000100001000000000100000000000000000");
         }
-
     }
 }
