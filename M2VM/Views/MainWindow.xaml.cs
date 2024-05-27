@@ -63,5 +63,49 @@ namespace ProjetBadge
                 SaveMessageTextBox.Clear();
             }
         }
+
+        private void MessagesListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            bool isItemSelected = MessagesListBox.SelectedItem != null;
+            EditButton.IsEnabled = isItemSelected;
+            DeleteButton.IsEnabled = isItemSelected;
+            SendSelectedButton.IsEnabled = isItemSelected;
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessagesListBox.SelectedItem != null)
+            {
+                string selectedMessage = MessagesListBox.SelectedItem as string;
+                SaveMessageTextBox.Text = selectedMessage;
+                messages.Remove(selectedMessage);
+            }
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessagesListBox.SelectedItem != null)
+            {
+                string selectedMessage = MessagesListBox.SelectedItem as string;
+                messages.Remove(selectedMessage);
+            }
+        }
+
+        private void SendSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessagesListBox.SelectedItem != null)
+            {
+                try
+                {
+                    string selectedMessage = MessagesListBox.SelectedItem as string;
+                    mainViewModel.SendToOneDevice(selectedMessage);
+                    StatusTextBlock.Text = "Message sent!";
+                }
+                catch (Exception ex)
+                {
+                    StatusTextBlock.Text = $"Failed to send message: {ex.Message}";
+                }
+            }
+        }
     }
 }
