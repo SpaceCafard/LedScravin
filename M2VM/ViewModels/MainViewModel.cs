@@ -18,9 +18,7 @@ namespace BadgeScreen.M2VM.ViewModels
         private TcpClient client;
         private NetworkStream stream;
         private Dictionary<string, string> characterTrad;
-        private int port;
         private ObservableCollection<int> ports;
-        public string statusBalayage;
 
         private string scanStatus;
 
@@ -44,82 +42,128 @@ namespace BadgeScreen.M2VM.ViewModels
         public MainViewModel()
         {
             ports = new ObservableCollection<int>();
-            ScanStatus = "Scan not started";
+            ScanStatus = "Scan pas encore lancé";
             InitMappeur();
         }
 
         public void ConnectToPort(int port)
         {
-            this.port = port;
+            ////Fermer les anciennes connexions
+            //if(stream!=null && client!= null)
+            //{
+            //    Disconnect();
+            //}
+
+            //Créer la nouvelle connexion
             client = new TcpClient("127.0.0.1", port); //On fait que avec une connexion locale
             stream = client.GetStream();
+
+            Trace.WriteLine("STREAM :" + stream);
         }
 
-        public async Task ScanPort()
+        public void AddPortToPortsList(int port)
         {
-            string ipAddress = "127.0.0.1";
-            Trace.WriteLine("Début du scan");
-
-            ScanStatus = "Scan in progress";
-
-            var tasks = new List<Task>();
-            var semaphore = new SemaphoreSlim(30); // Limiter à 10 connexions simultanées
-
-            for (int port = 1000; port < 2000; port++)
-            {
-                await semaphore.WaitAsync();
-
-                tasks.Add(Task.Run(async () =>
-                {
-                    try
-                    {
-                        await CheckPortAsync(ipAddress, port);
-                    }
-                    finally
-                    {
-                        semaphore.Release();
-                    }
-                }));
-            }
-
-            await Task.WhenAll(tasks);
-
-            Trace.WriteLine("Fin du scan");
-
-            ScanStatus = "Scan completed";
-
-            // Connect to all found ports
-            foreach (var port in ports)
-            {
-                ConnectToPort(port);
-            }
+            ports.Add(port);
         }
 
-        private async Task CheckPortAsync(string ipAddress, int port)
+        public async Task<List<int>> ScanPortsAsync()
         {
-            using (TcpClient tcpClient = new TcpClient())
+            ScanStatus = "Scan en cours...";
+
+            var openPorts = new List<int>();
+
+            for (int port = 1233; port <= 1236; port++)
             {
-                Trace.WriteLine("Scanning port " + port);
                 try
                 {
-                    await tcpClient.ConnectAsync(ipAddress, port);
-                    Trace.WriteLine($"TCP listener found at {ipAddress}:{port}");
+                    TcpClient connectTest = new("127.0.0.1", port);
+                    NetworkStream ns = connectTest.GetStream();
 
-                    this.statusBalayage = $"TCP listener found at {ipAddress}:{port}";
+                    string scanMsg = transformMessage("SCANTEST").ToString();
+                    byte[] buffer = Encoding.ASCII.GetBytes(scanMsg);
+                    await ns.WriteAsync(buffer);
 
-                    ports.Add(port);
+                    await ns.FlushAsync();
+                    ns.Close();
+
+                    openPorts.Add(port);
+
+                    Trace.WriteLine($"Alive connection on port {port}");
                 }
-                catch (SocketException)
+                catch
                 {
-                    // Silently ignore exceptions
+                    continue;
                 }
             }
+
+            ScanStatus = "Scan terminé !";
+
+            return openPorts;
         }
 
-        public void Disconnect()
+        //public async Task ScanPort()
+        //{
+        //    string ipAddress = "127.0.0.1";
+        //    Trace.WriteLine("Début du scan");
+
+        //    ScanStatus = "Scan en cours...";
+
+        //    var tasks = new List<Task>();
+        //    var semaphore = new SemaphoreSlim(60); // Limiter à 60 connexions simultanées
+
+        //    for (int port = 1000; port < 2000; port++)
+        //    {
+        //        await semaphore.WaitAsync();
+
+        //        tasks.Add(Task.Run(async () =>
+        //        {
+        //            try
+        //            {
+        //                await CheckPortAsync(ipAddress, port);
+        //            }
+        //            finally
+        //            {
+        //                semaphore.Release();
+        //            }
+        //        }));
+        //    }
+
+        //    await Task.WhenAll(tasks);
+
+        //    Trace.WriteLine("Fin du scan");
+
+        //    ScanStatus = "Scan terminé !";
+
+        //    // Connect to all found ports
+        //    foreach (var port in ports)
+        //    {
+        //        ConnectToPort(port);
+        //    }
+        //}
+
+        //private async Task CheckPortAsync(string ipAddress, int port)
+        //{
+        //    using (TcpClient tcpClient = new TcpClient())
+        //    {
+        //        Trace.WriteLine("Scanning port " + port);
+        //        try
+        //        {
+        //            await tcpClient.ConnectAsync(ipAddress, port);
+        //            Trace.WriteLine($"TCP listener found at {ipAddress}:{port}");
+
+        //            ports.Add(port);
+        //        }
+        //        catch (SocketException)
+        //        {
+        //            // Silently ignore exceptions
+        //        }
+        //    }
+        //}
+
+        public async void Disconnect()
         {
+            await stream.FlushAsync();
             stream.Close();
-            client.Close();
         }
 
         public void SendMessage(string message)
@@ -141,14 +185,16 @@ namespace BadgeScreen.M2VM.ViewModels
 
 
                 // Envoie les données via le flux (stream)
-                using (NetworkStream stream = client.GetStream())
-                {
-                    byte[] buffer = Encoding.ASCII.GetBytes(messageBuilder);
-                    stream.Write(buffer, 0, buffer.Length);
-                }
+                NetworkStream stream = client.GetStream();
+                
+                byte[] buffer = Encoding.ASCII.GetBytes(messageBuilder);
+                stream.Write(buffer, 0, buffer.Length);
 
-                //Se reconnecter après un envoi
-                ConnectToPort(portHere);
+                Disconnect();
+                
+
+                ////Se reconnecter après un envoi
+                //ConnectToPort(portHere);
             }
             
 

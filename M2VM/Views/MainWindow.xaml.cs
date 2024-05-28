@@ -1,5 +1,6 @@
 ﻿using BadgeScreen.M2VM.ViewModels;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Windows;
@@ -38,13 +39,15 @@ namespace ProjetBadge
             {
                 try
                 {
+                    mainViewModel.AddPortToPortsList(port);
                     mainViewModel.ConnectToPort(port);
                     StatusTextBlock.Text = "Connecté !";
-                    StatusTextBlock.Text = mainViewModel.statusBalayage;
                 }
                 catch (Exception ex)
                 {
                     StatusTextBlock.Text = $"La connexion a échouée: {ex.Message}";
+
+                    Trace.WriteLine($"La connexion a échouée: {ex.Message}");
                 }
             }
             else
@@ -55,7 +58,13 @@ namespace ProjetBadge
 
         public async void ScanButton_Click(object sender, RoutedEventArgs e)
         {
-           await mainViewModel.ScanPort();
+            //await mainViewModel.ScanPort();
+
+            var openPorts = await mainViewModel.ScanPortsAsync();
+            foreach (var port in openPorts)
+            {
+                PortListBox.Items.Add($"Port {port} is open");
+            }
         }
 
         private void SendMessageButton_Click(object sender, RoutedEventArgs e)

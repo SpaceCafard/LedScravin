@@ -24,9 +24,9 @@
         <Button Content="Enregistrer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,120,0,0" Click="SaveMessageButton_Click"/>
 
         <!--Actions sur le message sélectionné-->
-        <Button x:Name="EditButton" Content="Modifier" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="370,200,0,0" Click="EditButton_Click" IsEnabled="False"/>
-        <Button x:Name="DeleteButton" Content="Supprimer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="370,240,0,0" Click="DeleteButton_Click" IsEnabled="False"/>
-        <Button x:Name="SendSelectedButton" Content="Envoyer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="370,280,0,0" Click="SendSelectedButton_Click" IsEnabled="False"/>
+        <Button x:Name="EditButton" Content="Modifier" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="255,205,0,0" Click="EditButton_Click" IsEnabled="False"/>
+        <Button x:Name="DeleteButton" Content="Supprimer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="255,245,0,0" Click="DeleteButton_Click" IsEnabled="False"/>
+        <Button x:Name="SendSelectedButton" Content="Envoyer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="255,285,0,0" Click="SendSelectedButton_Click" IsEnabled="False"/>
 
         <!--Trie-->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
@@ -36,8 +36,8 @@
         </StackPanel>
 
         <!-- Filtrer -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="340,160,0,0">
-            <Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,160,0,0" Width="105">
+            <Grid Width="103">
                 <TextBox x:Name="SearchTextBox" Width="200" Margin="5" TextChanged="SearchTextBox_TextChanged"/>
                 <TextBlock Text="Filtrer..." IsHitTestVisible="False" 
                            VerticalAlignment="Center" 
@@ -47,11 +47,13 @@
                            />
             </Grid>
         </StackPanel>
-        
+
         <!--Scanner-->
-        <Button x:Name="ScanPortsButton" Content="Scanner" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="400,10,0,0" Click="ScanButton_Click"/>
-        
+        <Button x:Name="ScanPortsButton" Content="Scanner" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="425,11,0,0" Click="ScanButton_Click"/>
+
         <!-- Scan status -->
-        <TextBlock x:Name="ScanStatusTextBlock" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="400,40,0,0" Text="{Binding ScanStatus}" />
+        <TextBlock x:Name="ScanStatusTextBlock" Width="200" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="375,40,0,0" Text="{Binding ScanStatus}" />
+
+        <ListBox x:Name="PortListBox" HorizontalAlignment="Left" Height="64" Margin="375,82,0,0" VerticalAlignment="Top" Width="200"/>
     </Grid>
 </Window>
