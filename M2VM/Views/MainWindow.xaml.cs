@@ -29,6 +29,7 @@ namespace ProjetBadge
             };
             filteredMessages = new ObservableCollection<string>(messages);
             MessagesListBox.ItemsSource = filteredMessages;
+            this.DataContext = mainViewModel;
         }
 
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
@@ -37,8 +38,9 @@ namespace ProjetBadge
             {
                 try
                 {
-                    mainViewModel.Connect(port);
+                    mainViewModel.ConnectToPort(port);
                     StatusTextBlock.Text = "Connecté !";
+                    StatusTextBlock.Text = mainViewModel.statusBalayage;
                 }
                 catch (Exception ex)
                 {
@@ -51,12 +53,17 @@ namespace ProjetBadge
             }
         }
 
+        public async void ScanButton_Click(object sender, RoutedEventArgs e)
+        {
+           await mainViewModel.ScanPort();
+        }
+
         private void SendMessageButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 string message = MessageTextBox.Text;
-                mainViewModel.SendToOneDevice(message);
+                mainViewModel.SendMessage(message);
                 StatusTextBlock.Text = "Message sent!";
             }
             catch (Exception ex)
@@ -113,7 +120,7 @@ namespace ProjetBadge
                 try
                 {
                     string selectedMessage = MessagesListBox.SelectedItem as string;
-                    mainViewModel.SendToOneDevice(selectedMessage);
+                    mainViewModel.SendMessage(selectedMessage);
                     StatusTextBlock.Text = "Message sent!";
                 }
                 catch (Exception ex)
