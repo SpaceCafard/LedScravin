@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -70,35 +71,41 @@ namespace BadgeScreen.M2VM.ViewModels
         {
             ScanStatus = "Scan en cours...";
 
-            var openPorts = new List<int>();
+            var openPorts = new ConcurrentBag<int>();
+            var tasks = new List<Task>();
 
-            for (int port = 1233; port <= 1236; port++)
+            for (int port = 1000; port <= 2000; port++)
             {
-                try
+                int capturedPort = port; // Capture the current port value
+                tasks.Add(Task.Run(async () =>
                 {
-                    TcpClient connectTest = new("127.0.0.1", port);
-                    NetworkStream ns = connectTest.GetStream();
+                    try
+                    {
+                        using TcpClient connectTest = new("127.0.0.1", capturedPort);
+                        using NetworkStream ns = connectTest.GetStream();
 
-                    string scanMsg = transformMessage("SCANTEST").ToString();
-                    byte[] buffer = Encoding.ASCII.GetBytes(scanMsg);
-                    await ns.WriteAsync(buffer);
+                        string scanMsg = transformMessage("SCAN").ToString();
+                        byte[] buffer = Encoding.ASCII.GetBytes(scanMsg);
+                        await ns.WriteAsync(buffer);
 
-                    await ns.FlushAsync();
-                    ns.Close();
+                        await ns.FlushAsync();
 
-                    openPorts.Add(port);
+                        openPorts.Add(capturedPort);
 
-                    Trace.WriteLine($"Alive connection on port {port}");
-                }
-                catch
-                {
-                    continue;
-                }
+                        Trace.WriteLine($"Alive connection on port {capturedPort}");
+                    }
+                    catch
+                    {
+                        Trace.WriteLine($"Failed to connect to port {capturedPort}");
+                    }
+                }));
             }
+
+            await Task.WhenAll(tasks);
 
             ScanStatus = "Scan terminé !";
 
-            return openPorts;
+            return openPorts.ToList();
         }
 
         //public async Task ScanPort()
