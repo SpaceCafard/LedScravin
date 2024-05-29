@@ -1,7 +1,9 @@
 ﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="ProjetBadge.MainWindow"
+    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="ProjetBadge.MainWindow"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     Title="MainWindow" Height="600" Width="800" ResizeMode="NoResize">
     <Grid>
         <!--Ajouter un port-->
@@ -62,7 +64,17 @@
         <TextBlock x:Name="ScanStatusTextBlock" Width="200" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="510,41,0,0" Text="{Binding ScanStatus}" />
         <ListBox x:Name="PortListBox" HorizontalAlignment="Left" Height="64" Margin="510,71,0,0" VerticalAlignment="Top" Width="200"/>
 
+        <!--Titre-->
 
+        <!-- Appliquer le style au TextBlock -->
+        <TextBlock 
+            FontSize="50"
+            FontWeight="UltraBold"
+            FontFamily="Century Gothic"
+            Foreground="OrangeRed" Margin="0,0,358,492"
+            >
+            Led Screen App
+        </TextBlock>
 
     </Grid>
 </Window>
