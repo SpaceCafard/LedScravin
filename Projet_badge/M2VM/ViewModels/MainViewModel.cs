@@ -46,6 +46,8 @@ namespace BadgeScreen.M2VM.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        //Fonction qui permet la mise de l'interface du front quand on a un changement.
+        //Exemple pour le message de status du scan des ports : pas lancé/en cours/terminé
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -75,16 +77,19 @@ namespace BadgeScreen.M2VM.ViewModels
             Disconnect();
         }
 
+        //Ajouter un port à la liste de ports
         public void AddPortToPortsList(int port)
         {
             ports.Add(port);
         }
 
+        //Supoprimer un ports de la liste de ports
         public void RemovePortFromList(int port)
         {
             ports.Remove(port);
         }
 
+        //Scanner les ports de manière asynchrone pour pas freeze toute l'app
         public async Task<List<int>> ScanPortsAsync()
         {
             ScanStatus = "Scan en cours...";
@@ -92,7 +97,7 @@ namespace BadgeScreen.M2VM.ViewModels
             var openPorts = new ConcurrentBag<int>();
             var tasks = new List<Task>();
 
-            for (int port = 1100; port <= 1300; port++)
+            for (int port = 1100; port <= 1200; port++)
             {
                 int capturedPort = port; // Capture the current port value
                 tasks.Add(Task.Run(async () =>
@@ -126,71 +131,14 @@ namespace BadgeScreen.M2VM.ViewModels
             return openPorts.ToList();
         }
 
-        //public async Task ScanPort()
-        //{
-        //    string ipAddress = "127.0.0.1";
-        //    Trace.WriteLine("Début du scan");
-
-        //    ScanStatus = "Scan en cours...";
-
-        //    var tasks = new List<Task>();
-        //    var semaphore = new SemaphoreSlim(60); // Limiter à 60 connexions simultanées
-
-        //    for (int port = 1000; port < 2000; port++)
-        //    {
-        //        await semaphore.WaitAsync();
-
-        //        tasks.Add(Task.Run(async () =>
-        //        {
-        //            try
-        //            {
-        //                await CheckPortAsync(ipAddress, port);
-        //            }
-        //            finally
-        //            {
-        //                semaphore.Release();
-        //            }
-        //        }));
-        //    }
-
-        //    await Task.WhenAll(tasks);
-
-        //    Trace.WriteLine("Fin du scan");
-
-        //    ScanStatus = "Scan terminé !";
-
-        //    // Connect to all found ports
-        //    foreach (var port in ports)
-        //    {
-        //        ConnectToPort(port);
-        //    }
-        //}
-
-        //private async Task CheckPortAsync(string ipAddress, int port)
-        //{
-        //    using (TcpClient tcpClient = new TcpClient())
-        //    {
-        //        Trace.WriteLine("Scanning port " + port);
-        //        try
-        //        {
-        //            await tcpClient.ConnectAsync(ipAddress, port);
-        //            Trace.WriteLine($"TCP listener found at {ipAddress}:{port}");
-
-        //            ports.Add(port);
-        //        }
-        //        catch (SocketException)
-        //        {
-        //            // Silently ignore exceptions
-        //        }
-        //    }
-        //}
-
+        //Fonction pour se déconnecter proprement
         public async void Disconnect()
         {
             await stream.FlushAsync();
             stream.Close();
         }
 
+        //Envoyer un message à tous les ports de la liste des ports
         public void SendMessage(string message)
         {
             // Tester si le message est vide
@@ -205,7 +153,7 @@ namespace BadgeScreen.M2VM.ViewModels
                 //Créer la nouvelle connexion
                 client = new TcpClient("127.0.0.1", portHere); //On fait que avec une connexion locale
 
-                // Si le message n'est pas vide, on le passe d'abord en majuscules
+                //Si le message n'est pas vide, on le passe d'abord en majuscules
                 message = message.ToUpper();
 
                 //Ensuite on crée la suite de 0 et 1 que l'on veut envoyer grace à la méthode transformMessage
@@ -232,7 +180,7 @@ namespace BadgeScreen.M2VM.ViewModels
             Debug.Print("Envoye");
         }
 
-
+        //Codage du message
         private StringBuilder transformMessage(string message)
         {
             int compteur = 1;
@@ -289,6 +237,7 @@ namespace BadgeScreen.M2VM.ViewModels
             return reponse;
         }
 
+        //Initialiser une liste de message depuis un fichier JSON
         public ObservableCollection<string> InitMessages()
         {
             string filePath = "M2VM\\Models\\message.json";
@@ -324,6 +273,7 @@ namespace BadgeScreen.M2VM.ViewModels
             return new ObservableCollection<string>();
         }
 
+        //Importer une liste de message depuis un fichier csv
         public void ImportCsv(string filePath, ObservableCollection<string> messages)
         {
             try
@@ -348,6 +298,7 @@ namespace BadgeScreen.M2VM.ViewModels
             }
         }
 
+        //Exporter la liste des message dans un fichier csv
         public void ExportCsv(string filePath, ObservableCollection<string> messages)
         {
             try
@@ -368,6 +319,7 @@ namespace BadgeScreen.M2VM.ViewModels
             }
         }
 
+        //Importer une liste de message depuis un fichier excel
         public void ImportExcel(string filePath, ObservableCollection<string> messages)
         {
             try
@@ -393,6 +345,7 @@ namespace BadgeScreen.M2VM.ViewModels
             }
         }
 
+        //Exporter la liste des message dans un fichier excel
         public void ExportExcel(string filePath, ObservableCollection<string> messages)
         {
             try
@@ -413,6 +366,7 @@ namespace BadgeScreen.M2VM.ViewModels
             }
         }
 
+        //Le dico des lettres et chiffres
         private void InitMappeur()
         {
             this.characterTrad = new Dictionary<string, string>();

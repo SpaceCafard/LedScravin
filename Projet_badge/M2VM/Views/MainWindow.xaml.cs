@@ -30,6 +30,8 @@ namespace ProjetBadge
             this.DataContext = mainViewModel;
         }
 
+        //Ajouter un port dans la liste de ports
+        //On vérifie que le port est accessible avant de l'ajouter
         private void AjouterPortButton_Click(object sender, RoutedEventArgs e)
         {
             //int port = Int32.Parse(PortTextBox.Text);
@@ -57,6 +59,7 @@ namespace ProjetBadge
             }
         }
 
+        //Griser/dégriser les boutons d'actions quand on clique sur un port
         private void PortConnectedListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             bool isItemSelected = PortConnectedListBox.SelectedItem != null;
@@ -64,6 +67,7 @@ namespace ProjetBadge
             DeletePortButton.IsEnabled = isItemSelected;
         }
 
+        //Modifier un port de la liste des ports
         private void EditPortButton_Click(object sender, RoutedEventArgs e)
         {
             if (PortConnectedListBox.SelectedItem != null)
@@ -78,6 +82,7 @@ namespace ProjetBadge
             }
         }
 
+        //Supprimer un port de la liste des ports
         private void DeletePortButton_Click(object sender, RoutedEventArgs e)
         {
             if (PortConnectedListBox.SelectedItem != null)
@@ -91,6 +96,7 @@ namespace ProjetBadge
             }
         }
 
+        //Lancer un scan des ports
         public async void ScanButton_Click(object sender, RoutedEventArgs e)
         {
             //await mainViewModel.ScanPort();
@@ -102,6 +108,7 @@ namespace ProjetBadge
             }
         }
 
+        //Envoyer un message depui le champ d'écriture d'un message custom
         private void SendMessageButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -116,6 +123,7 @@ namespace ProjetBadge
             }
         }
 
+        //Ajouter un message à la liste des messages
         private void SaveMessageButton_Click(object sender, RoutedEventArgs e)
         {
             string message = SaveMessageTextBox.Text;
@@ -128,6 +136,7 @@ namespace ProjetBadge
             }
         }
 
+        //Griser/dégriser les boutons d'actions quand on clique sur un message de la liste des messages
         private void MessagesListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             bool isItemSelected = MessagesListBox.SelectedItem != null;
@@ -136,6 +145,7 @@ namespace ProjetBadge
             SendSelectedButton.IsEnabled = isItemSelected;
         }
 
+        //Modifier un message de la liste des messages
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             if (MessagesListBox.SelectedItem != null)
@@ -143,20 +153,22 @@ namespace ProjetBadge
                 string selectedMessage = MessagesListBox.SelectedItem as string;
                 SaveMessageTextBox.Text = selectedMessage;
                 messages.Remove(selectedMessage);
-                ApplyFilter(); // Apply the current filter after removing the message
+                ApplyFilter(); // Appliquer le filtre actuel si yen a un après l'edit du message
             }
         }
 
+        //Supprimer un message de la liste des messages
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (MessagesListBox.SelectedItem != null)
             {
                 string selectedMessage = MessagesListBox.SelectedItem as string;
                 messages.Remove(selectedMessage);
-                ApplyFilter(); // Apply the current filter after removing the message
+                ApplyFilter(); //  Appliquer le filtre actuel si yen a un après la suppression du message
             }
         }
 
+        //Envoyer le messafe selectionner dpuis la liste des messages
         private void SendSelectedButton_Click(object sender, RoutedEventArgs e)
         {
             if (MessagesListBox.SelectedItem != null)
@@ -174,29 +186,34 @@ namespace ProjetBadge
             }
         }
 
+        //Trier la liste des messages par ordre alphabétique
         private void SortAlphabeticallyButton_Click(object sender, RoutedEventArgs e)
         {
             var sortedMessages = filteredMessages.OrderBy(m => m).ToList();
             UpdateFilteredMessages(sortedMessages);
         }
 
+        //Trier la liste des messages du plus petit au plus grand
         private void SortSizeAscendingButton_Click(object sender, RoutedEventArgs e)
         {
             var sortedMessages = filteredMessages.OrderBy(m => m.Length).ToList();
             UpdateFilteredMessages(sortedMessages);
         }
 
+        //Trier la liste des messages du plus grand au plus petit
         private void SortSizeDescendingButton_Click(object sender, RoutedEventArgs e)
         {
             var sortedMessages = filteredMessages.OrderByDescending(m => m.Length).ToList();
             UpdateFilteredMessages(sortedMessages);
         }
 
+        //Fonction appelé par la barre de recherche (la barre de filtre) 
         private void SearchTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             ApplyFilter();
         }
 
+        //Apliquer le filtre sur la liste de messages
         private void ApplyFilter()
         {
             string searchText = SearchTextBox.Text.ToLower();
@@ -211,7 +228,7 @@ namespace ProjetBadge
             }
         }
 
-        
+        //Mettre a jour la liste des messages après un clique sur un bouton de trie
         private void UpdateFilteredMessages(IEnumerable<string> updatedMessages)
         {
             filteredMessages.Clear();

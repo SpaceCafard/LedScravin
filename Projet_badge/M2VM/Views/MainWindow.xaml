@@ -45,27 +45,26 @@
                 <TextBox x:Name="SearchTextBox" Margin="5,5,0,5" TextChanged="SearchTextBox_TextChanged"/>
                 <TextBlock Text="Filtrer..." IsHitTestVisible="False" 
                            VerticalAlignment="Center" 
-                           HorizontalAlignment="Left" 
-                           Margin="8,0,0,0" 
+                           HorizontalAlignment="Left"
+                           Margin="8,0,0,0"
                            Foreground="Gray" 
                            />
             </Grid>
         </StackPanel>
 
         <!--Trie-->
-        <Button x:Name="SortAlphabeticallyButton" Content="Trier alphabétiquement" HorizontalAlignment="Left" Margin="622,413,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortAlphabeticallyButton_Click"/>
-        <Button x:Name="SortSizeAscendingButton" Content="Trier par taille ascendante" HorizontalAlignment="Left" Margin="622,381,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeAscendingButton_Click"/>
-        <Button x:Name="SortSizeDescendingButton" Content="Trier par taille descendante" HorizontalAlignment="Left" Margin="622,347,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeDescendingButton_Click"/>
+        <Button Content="Trier alphabétiquement" HorizontalAlignment="Left" Margin="622,411,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortAlphabeticallyButton_Click"/>
+        <Button Content="Trier par taille ascendante" HorizontalAlignment="Left" Margin="622,378,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeAscendingButton_Click"/>
+        <Button Content="Trier par taille descendante" HorizontalAlignment="Left" Margin="622,344,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeDescendingButton_Click"/>
 
         <!--Scanner-->
-        <Button x:Name="ScanPortsButton" Content="Scanner" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="560,11,0,0" Click="ScanButton_Click"/>
+        <Button Content="Scanner" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="560,11,0,0" Click="ScanButton_Click"/>
 
         <!-- Scan status -->
-        <TextBlock x:Name="ScanStatusTextBlock" Width="200" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="510,41,0,0" Text="{Binding ScanStatus}" />
+        <TextBlock Width="200" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="510,41,0,0" Text="{Binding ScanStatus}" />
         <ListBox x:Name="PortListBox" HorizontalAlignment="Left" Height="64" Margin="510,71,0,0" VerticalAlignment="Top" Width="200"/>
 
         <!--Titre-->
-
         <!-- Appliquer le style au TextBlock -->
         <TextBlock 
             FontSize="50"
