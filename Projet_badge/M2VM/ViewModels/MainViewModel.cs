@@ -97,7 +97,7 @@ namespace BadgeScreen.M2VM.ViewModels
             var openPorts = new ConcurrentBag<int>();
             var tasks = new List<Task>();
 
-            for (int port = 1100; port <= 1200; port++)
+            for (int port = 1200; port <= 1300; port++)
             {
                 int capturedPort = port; // Capture the current port value
                 tasks.Add(Task.Run(async () =>

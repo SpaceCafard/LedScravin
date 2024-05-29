@@ -102,8 +102,10 @@ namespace ProjetBadge
             //await mainViewModel.ScanPort();
 
             var openPorts = await mainViewModel.ScanPortsAsync();
+            Trace.WriteLine("Uon est avant la boucle");
             foreach (var port in openPorts)
             {
+                Trace.WriteLine("UN PORT EST AJOUTE A LA LISTE DES PORTS");
                 PortListBox.Items.Add($"Port {port} is open");
             }
         }
