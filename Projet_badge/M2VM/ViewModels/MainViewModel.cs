@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Formats.Asn1;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,6 +13,9 @@ using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
+using System.Windows;
+using CsvHelper;
+using OfficeOpenXml;
 
 
 
@@ -46,8 +51,10 @@ namespace BadgeScreen.M2VM.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        //CONSTRUCTAVOR
         public MainViewModel()
         {
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial; // Set license POUR LA LIB XLSX
             ports = new ObservableCollection<int>();
             ScanStatus = "Scan pas encore lancé";
             InitMappeur();
@@ -315,6 +322,95 @@ namespace BadgeScreen.M2VM.ViewModels
             }
 
             return new ObservableCollection<string>();
+        }
+
+        public void ImportCsv(string filePath, ObservableCollection<string> messages)
+        {
+            try
+            {
+                using (var reader = new StreamReader(filePath))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    while (csv.Read())
+                    {
+                        var message = csv.GetField<string>(0);
+                        if (!string.IsNullOrWhiteSpace(message))
+                        {
+                            messages.Add(message);
+                        }
+                    }
+                    //FilterMessages("");
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+            }
+        }
+
+        public void ExportCsv(string filePath, ObservableCollection<string> messages)
+        {
+            try
+            {
+                using (var writer = new StreamWriter(filePath))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    foreach (var message in messages)
+                    {
+                        csv.WriteField(message);
+                        csv.NextRecord();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+            }
+        }
+
+        public void ImportExcel(string filePath, ObservableCollection<string> messages)
+        {
+            try
+            {
+                using (var package = new ExcelPackage(new FileInfo(filePath)))
+                {
+                    var worksheet = package.Workbook.Worksheets[0];
+                    var rowCount = worksheet.Dimension.Rows;
+                    for (int row = 1; row <= rowCount; row++)
+                    {
+                        var message = worksheet.Cells[row, 1].Value?.ToString();
+                        if (!string.IsNullOrWhiteSpace(message))
+                        {
+                            messages.Add(message);
+                        }
+                    }
+                    //FilterMessages("");
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+            }
+        }
+
+        public void ExportExcel(string filePath, ObservableCollection<string> messages)
+        {
+            try
+            {
+                using (var package = new ExcelPackage())
+                {
+                    var worksheet = package.Workbook.Worksheets.Add("Messages");
+                    for (int i = 0; i < messages.Count; i++)
+                    {
+                        worksheet.Cells[i + 1, 1].Value = messages[i];
+                    }
+                    package.SaveAs(new FileInfo(filePath));
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+            }
         }
 
         private void InitMappeur()

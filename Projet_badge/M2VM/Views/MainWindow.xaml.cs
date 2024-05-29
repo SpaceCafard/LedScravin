@@ -1,4 +1,5 @@
 ﻿using BadgeScreen.M2VM.ViewModels;
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -210,6 +211,7 @@ namespace ProjetBadge
             }
         }
 
+        
         private void UpdateFilteredMessages(IEnumerable<string> updatedMessages)
         {
             filteredMessages.Clear();
@@ -219,24 +221,62 @@ namespace ProjetBadge
             }
         }
 
+        //Importer des messages depuis un fichier csv
         private void ImportCsvButton_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                mainViewModel.ImportCsv(openFileDialog.FileName, messages);
+            }
 
+            RefreshMessagesList();
         }
 
+        //Exporter la liste des messages dans un fichier csv
         private void ExportCsvButton_Click(object sender, RoutedEventArgs e)
         {
-
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                mainViewModel.ExportCsv(saveFileDialog.FileName, messages);
+            }
         }
 
+        //Importer des messages depuis un fichier excel
         private void ImportExcelButton_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                mainViewModel.ImportExcel(openFileDialog.FileName, messages);
+            }
 
+            RefreshMessagesList();
         }
 
+        //Exporter la liste des messages dans un fichier excel
         private void ExportExcelButton_Click(object sender, RoutedEventArgs e)
         {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                mainViewModel.ExportExcel(saveFileDialog.FileName, messages);
+            }
+        }
 
+        //Rafraichir la liste des message après un import
+        private void RefreshMessagesList()
+        {
+            filteredMessages.Clear();
+            foreach (var message in messages)
+            {
+                filteredMessages.Add(message);
+            }
         }
     }
 }
