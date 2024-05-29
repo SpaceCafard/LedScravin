@@ -53,9 +53,9 @@
         </StackPanel>
 
         <!--Trie-->
-        <Button x:Name="SortAlphabeticallyButton" Content="Trier alphabétiquement" HorizontalAlignment="Left" Margin="626,428,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortAlphabeticallyButton_Click"/>
-        <Button x:Name="SortSizeAscendingButton" Content="Trier par taille ascendante" HorizontalAlignment="Left" Margin="626,395,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeAscendingButton_Click"/>
-        <Button x:Name="SortSizeDescendingButton" Content="Trier par taille descendante" HorizontalAlignment="Left" Margin="626,361,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeDescendingButton_Click"/>
+        <Button x:Name="SortAlphabeticallyButton" Content="Trier alphabétiquement" HorizontalAlignment="Left" Margin="622,413,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortAlphabeticallyButton_Click"/>
+        <Button x:Name="SortSizeAscendingButton" Content="Trier par taille ascendante" HorizontalAlignment="Left" Margin="622,381,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeAscendingButton_Click"/>
+        <Button x:Name="SortSizeDescendingButton" Content="Trier par taille descendante" HorizontalAlignment="Left" Margin="622,347,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeDescendingButton_Click"/>
 
         <!--Scanner-->
         <Button x:Name="ScanPortsButton" Content="Scanner" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="560,11,0,0" Click="ScanButton_Click"/>
@@ -71,10 +71,16 @@
             FontSize="50"
             FontWeight="UltraBold"
             FontFamily="Century Gothic"
-            Foreground="OrangeRed" Margin="0,0,358,492"
+            Foreground="OrangeRed" Margin="32,4,326,492"
             >
             Led Screen App
         </TextBlock>
+
+        <!--Import / Export-->
+        <Button Content="Import CSV" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="651,442,0,0" Click="ImportCsvButton_Click"/>
+        <Button Content="Export CSV" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="651,472,0,0" Click="ExportCsvButton_Click"/>
+        <Button Content="Import Excel" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="651,502,0,0" Click="ImportExcelButton_Click"/>
+        <Button Content="Export Excel" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="651,532,0,0" Click="ExportExcelButton_Click"/>
 
     </Grid>
 </Window>

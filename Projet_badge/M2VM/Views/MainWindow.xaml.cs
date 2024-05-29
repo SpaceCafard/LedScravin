@@ -218,5 +218,25 @@ namespace ProjetBadge
                 filteredMessages.Add(message);
             }
         }
+
+        private void ImportCsvButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ExportCsvButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ImportExcelButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ExportExcelButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
