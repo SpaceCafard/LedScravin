@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 
 
 
@@ -20,7 +22,6 @@ namespace BadgeScreen.M2VM.ViewModels
         private NetworkStream stream;
         private Dictionary<string, string> characterTrad;
         private ObservableCollection<int> ports;
-
         private string scanStatus;
 
         public string ScanStatus
@@ -31,6 +32,11 @@ namespace BadgeScreen.M2VM.ViewModels
                 scanStatus = value;
                 OnPropertyChanged();
             }
+        }
+
+        public class Messages
+        {
+            public ObservableCollection<string> messages { get; set; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -204,17 +210,17 @@ namespace BadgeScreen.M2VM.ViewModels
 
                 // Envoie les données via le flux (stream)
                 stream = client.GetStream();
-                
+
                 byte[] buffer = Encoding.ASCII.GetBytes(messageBuilder);
                 stream.Write(buffer, 0, buffer.Length);
 
                 Disconnect();
-                
+
 
                 ////Se reconnecter après un envoi
                 //ConnectToPort(portHere);
             }
-            
+
 
             Debug.Print("Envoye");
         }
@@ -274,6 +280,41 @@ namespace BadgeScreen.M2VM.ViewModels
             }
 
             return reponse;
+        }
+
+        public ObservableCollection<string> InitMessages()
+        {
+            string filePath = "M2VM\\Models\\message.json";
+
+
+            if (File.Exists(filePath))
+            {
+                string jsonString = File.ReadAllText(filePath);
+                try
+                {
+                    var messages = JsonSerializer.Deserialize<Messages>(jsonString);
+
+                    if (messages != null && messages.messages != null)
+                    {
+                        return new ObservableCollection<string>(messages.messages);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("La désérialisation a renvoyé un objet null ou une liste de messages null.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Erreur lors de la désérialisation du fichier JSON : {ex.Message}");
+                }
+
+            }
+            else
+            {
+                Debug.WriteLine("Le fichier JSON n'existe pas.");
+            }
+
+            return new ObservableCollection<string>();
         }
 
         private void InitMappeur()

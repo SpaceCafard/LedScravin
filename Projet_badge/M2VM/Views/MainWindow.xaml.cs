@@ -19,16 +19,9 @@ namespace ProjetBadge
         public MainWindow()
         {
             InitializeComponent();
+            
             mainViewModel = new MainViewModel();
-            messages = new ObservableCollection<string>()
-            {
-                "SALUT",
-                "YANN",
-                "MOUSS",
-                "ABC",
-                "ZYX",
-                "ZZZZZ"
-            };
+            messages = mainViewModel.InitMessages();
             filteredMessages = new ObservableCollection<string>(messages);
             ports = new ObservableCollection<int>();
             PortConnectedListBox.ItemsSource = ports;
