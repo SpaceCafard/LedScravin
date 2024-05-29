@@ -49,22 +49,27 @@ namespace BadgeScreen.M2VM.ViewModels
 
         public void ConnectToPort(int port)
         {
-            ////Fermer les anciennes connexions
-            //if(stream!=null && client!= null)
-            //{
-            //    Disconnect();
-            //}
-
             //Créer la nouvelle connexion
             client = new TcpClient("127.0.0.1", port); //On fait que avec une connexion locale
+
+            // Envoie les données via le flux (stream)
             stream = client.GetStream();
 
-            Trace.WriteLine("STREAM :" + stream);
+            byte[] buffer = Encoding.ASCII.GetBytes(" ");
+            stream.Write(buffer, 0, buffer.Length);
+
+            //Se deconnecter pour pas empiéter sur les connections suivantes
+            Disconnect();
         }
 
         public void AddPortToPortsList(int port)
         {
             ports.Add(port);
+        }
+
+        public void RemovePortFromList(int port)
+        {
+            ports.Remove(port);
         }
 
         public async Task<List<int>> ScanPortsAsync()
@@ -84,7 +89,7 @@ namespace BadgeScreen.M2VM.ViewModels
                         using TcpClient connectTest = new("127.0.0.1", capturedPort);
                         using NetworkStream ns = connectTest.GetStream();
 
-                        string scanMsg = transformMessage("SCAN").ToString();
+                        string scanMsg = transformMessage(" ").ToString();
                         byte[] buffer = Encoding.ASCII.GetBytes(scanMsg);
                         await ns.WriteAsync(buffer);
 
@@ -184,15 +189,21 @@ namespace BadgeScreen.M2VM.ViewModels
 
             foreach (var portHere in ports)
             {
+                //Créer la nouvelle connexion
+                client = new TcpClient("127.0.0.1", portHere); //On fait que avec une connexion locale
+
                 // Si le message n'est pas vide, on le passe d'abord en majuscules
                 message = message.ToUpper();
 
                 //Ensuite on crée la suite de 0 et 1 que l'on veut envoyer grace à la méthode transformMessage
                 string messageBuilder = transformMessage(message).ToString();
 
+                Trace.WriteLine("Message a envoyer ; " + message);
+                Trace.WriteLine("Message en byte : " + messageBuilder);
+
 
                 // Envoie les données via le flux (stream)
-                NetworkStream stream = client.GetStream();
+                stream = client.GetStream();
                 
                 byte[] buffer = Encoding.ASCII.GetBytes(messageBuilder);
                 stream.Write(buffer, 0, buffer.Length);

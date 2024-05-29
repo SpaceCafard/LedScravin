@@ -4,32 +4,41 @@
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="ProjetBadge.MainWindow"
     Title="MainWindow" Height="600" Width="800">
     <Grid>
-        <!--Port de connexion-->
-        <Label Content="Numéro port:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
-        <TextBox x:Name="PortTextBox" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,10,0,0"/>
-        <Button Content="Connexion" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,10,0,0" Click="ConnectButton_Click"/>
+        <!--Ajouter un port-->
+        <Label Content="Numéro port:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,157,0,0"/>
+        <TextBox x:Name="PortTextBox" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,157,0,0"/>
+        <Button Content="Ajouter le port" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,157,0,0" Click="AjouterPortButton_Click"/>
+        
+        <!--Supprimer ou modifier un port-->
+        <Button x:Name="EditPortButton" Content="Modifier" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,203,0,0" Click="EditPortButton_Click" IsEnabled="False"/>
+        <Button x:Name="DeletePortButton" Content="Supprimer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,243,0,0" Click="DeletePortButton_Click" IsEnabled="False"/>
+        
+        <!--Liste des ports-->
+        <ListBox x:Name="PortConnectedListBox" Margin="120,191,470,9" SelectionChanged="PortConnectedListBox_SelectionChanged"/>
+        
+        
         <!--Message à envoyer-->
-        <Label Content="Message:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,50,0,0"/>
-        <TextBox x:Name="MessageTextBox" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,50,0,0"/>
-        <Button Content="Envoyer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,50,0,0" Click="SendMessageButton_Click"/>
+        <Label Content="Message:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,11,0,0"/>
+        <TextBox x:Name="MessageTextBox" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,11,0,0"/>
+        <Button Content="Envoyer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,11,0,0" Click="SendMessageButton_Click"/>
         <!--Status connexion-->
-        <TextBlock x:Name="StatusTextBlock" Width="360" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,90,0,0"/>
+        <TextBlock x:Name="StatusTextBlock" Width="360" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,122,0,0"/>
 
         <!--Lister des messages-->
-        <ListBox x:Name="MessagesListBox" Margin="10,160,580,40" SelectionChanged="MessagesListBox_SelectionChanged"/>
+        <ListBox x:Name="MessagesListBox" Margin="411,189,179,11" SelectionChanged="MessagesListBox_SelectionChanged"/>
 
         <!--Ajouter un message-->
-        <Label Content="Message :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,120,0,0"/>
-        <TextBox x:Name="SaveMessageTextBox" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,120,0,0"/>
-        <Button Content="Enregistrer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,120,0,0" Click="SaveMessageButton_Click"/>
+        <Label Content="Message :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="411,149,0,0"/>
+        <TextBox x:Name="SaveMessageTextBox" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="501,149,0,0"/>
+        <Button Content="Enregistrer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="651,149,0,0" Click="SaveMessageButton_Click"/>
 
         <!--Actions sur le message sélectionné-->
-        <Button x:Name="EditButton" Content="Modifier" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="255,205,0,0" Click="EditButton_Click" IsEnabled="False"/>
-        <Button x:Name="DeleteButton" Content="Supprimer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="255,245,0,0" Click="DeleteButton_Click" IsEnabled="False"/>
-        <Button x:Name="SendSelectedButton" Content="Envoyer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="255,285,0,0" Click="SendSelectedButton_Click" IsEnabled="False"/>
+        <Button x:Name="EditButton" Content="Modifier" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="656,234,0,0" Click="EditButton_Click" IsEnabled="False"/>
+        <Button x:Name="DeleteButton" Content="Supprimer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="656,274,0,0" Click="DeleteButton_Click" IsEnabled="False"/>
+        <Button x:Name="SendSelectedButton" Content="Envoyer" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="656,314,0,0" Click="SendSelectedButton_Click" IsEnabled="False"/>
 
         <!-- Filtrer -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,160,0,0" Width="105">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="651,189,0,0" Width="105">
             <Grid Width="103">
                 <TextBox x:Name="SearchTextBox" Margin="5,5,0,5" TextChanged="SearchTextBox_TextChanged"/>
                 <TextBlock Text="Filtrer..." IsHitTestVisible="False" 
@@ -42,19 +51,18 @@
         </StackPanel>
 
         <!--Trie-->
-        <Button x:Name="SortAlphabeticallyButton" Content="Trier alphabétiquement" HorizontalAlignment="Left" Margin="225,399,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortAlphabeticallyButton_Click"/>
-        <Button x:Name="SortSizeAscendingButton" Content="Trier par taille ascendante" HorizontalAlignment="Left" Margin="225,366,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeAscendingButton_Click"/>
-        <Button x:Name="SortSizeDescendingButton" Content="Trier par taille descendante" HorizontalAlignment="Left" Margin="225,332,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeDescendingButton_Click"/>
+        <Button x:Name="SortAlphabeticallyButton" Content="Trier alphabétiquement" HorizontalAlignment="Left" Margin="626,428,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortAlphabeticallyButton_Click"/>
+        <Button x:Name="SortSizeAscendingButton" Content="Trier par taille ascendante" HorizontalAlignment="Left" Margin="626,395,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeAscendingButton_Click"/>
+        <Button x:Name="SortSizeDescendingButton" Content="Trier par taille descendante" HorizontalAlignment="Left" Margin="626,361,0,0" VerticalAlignment="Top" Height="20" Width="164" Click="SortSizeDescendingButton_Click"/>
 
         <!--Scanner-->
-        <Button x:Name="ScanPortsButton" Content="Scanner" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="560,18,0,0" Click="ScanButton_Click"/>
+        <Button x:Name="ScanPortsButton" Content="Scanner" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="560,11,0,0" Click="ScanButton_Click"/>
 
         <!-- Scan status -->
-        <TextBlock x:Name="ScanStatusTextBlock" Width="200" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="525,50,0,0" Text="{Binding ScanStatus}" Grid.ColumnSpan="3" />
+        <TextBlock x:Name="ScanStatusTextBlock" Width="200" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="510,41,0,0" Text="{Binding ScanStatus}" />
+        <ListBox x:Name="PortListBox" HorizontalAlignment="Left" Height="64" Margin="510,71,0,0" VerticalAlignment="Top" Width="200"/>
 
-        <ListBox x:Name="PortListBox" HorizontalAlignment="Left" Height="64" Margin="510,100,0,0" VerticalAlignment="Top" Width="200" Grid.ColumnSpan="3"/>
-
-
-
+        
+        
     </Grid>
 </Window>

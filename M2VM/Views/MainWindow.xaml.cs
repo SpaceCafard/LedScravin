@@ -13,6 +13,7 @@ namespace ProjetBadge
         private NetworkStream stream;
         private MainViewModel mainViewModel;
         private ObservableCollection<string> messages;
+        private ObservableCollection<int> ports;
         private ObservableCollection<string> filteredMessages; // New collection for filtered messages
 
         public MainWindow()
@@ -29,19 +30,25 @@ namespace ProjetBadge
                 "ZZZZZ"
             };
             filteredMessages = new ObservableCollection<string>(messages);
+            ports = new ObservableCollection<int>();
+            PortConnectedListBox.ItemsSource = ports;
             MessagesListBox.ItemsSource = filteredMessages;
             this.DataContext = mainViewModel;
         }
 
-        private void ConnectButton_Click(object sender, RoutedEventArgs e)
+        private void AjouterPortButton_Click(object sender, RoutedEventArgs e)
         {
+            //int port = Int32.Parse(PortTextBox.Text);
+
             if (int.TryParse(this.PortTextBox.Text, out int port))
             {
-                try
-                {
-                    mainViewModel.AddPortToPortsList(port);
+                try{
                     mainViewModel.ConnectToPort(port);
-                    StatusTextBlock.Text = "Connecté !";
+                    StatusTextBlock.Text = "Port ajouté !";
+
+                    mainViewModel.AddPortToPortsList(port);
+                    ports.Add(port);
+                    PortTextBox.Clear();
                 }
                 catch (Exception ex)
                 {
@@ -53,6 +60,40 @@ namespace ProjetBadge
             else
             {
                 StatusTextBlock.Text = "Numéro de port non valide.";
+            }
+        }
+
+        private void PortConnectedListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            bool isItemSelected = PortConnectedListBox.SelectedItem != null;
+            EditPortButton.IsEnabled = isItemSelected;
+            DeletePortButton.IsEnabled = isItemSelected;
+        }
+
+        private void EditPortButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PortConnectedListBox.SelectedItem != null)
+            {
+                if (PortConnectedListBox.SelectedItem is int selectedPort)
+                {
+                    Trace.WriteLine("Port : " + selectedPort);
+                    PortTextBox.Text = selectedPort.ToString();
+                    ports.Remove(selectedPort);
+                    mainViewModel.RemovePortFromList(selectedPort);
+                }
+            }
+        }
+
+        private void DeletePortButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PortConnectedListBox.SelectedItem != null)
+            {
+                if (PortConnectedListBox.SelectedItem is int selectedPort)
+                {
+                    Trace.WriteLine("Port : " + selectedPort);
+                    ports.Remove(selectedPort);
+                    mainViewModel.RemovePortFromList(selectedPort);
+                }
             }
         }
 
